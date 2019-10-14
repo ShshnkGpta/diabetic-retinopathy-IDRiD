@@ -38,26 +38,26 @@ train_filename = 'train.tfrecords'
 
 writer = tf.io.TFRecordWriter(train_filename)
 for i in tqdm(range(len(data_list))):
-    # Load the image
-    img = cv2.imread(data_list[i][0])
-    #img = cv2.resize(img, (50, 50))
-    img_array = tf.keras.preprocessing.image.img_to_array(img)
-    img = tf.io.serialize_tensor(img_array)
-    image_shape = img_array.shape
-    label = data_list[i][1]
-    # Create a feature
-    feature = {
-              'train/label': _int64_feature(int(label)),
-              'train/image': _bytes_feature(img),
-              'height'     : _int64_feature(image_shape[0]),
-              'width'      : _int64_feature(image_shape[1]),
-              'depth'      : _int64_feature(image_shape[2]),
-              }
-    # Create an example protocol buffer
-    example = tf.train.Example(features=tf.train.Features(feature=feature))
-    
-    # Serialize to string and write on the file
-    writer.write(example.SerializeToString())
+  # Load the image
+  img = cv2.imread(data_list[i][0])
+  img = cv2.resize(img, (536, 356))   #original [4288, 2848, 3]
+  img_array = tf.keras.preprocessing.image.img_to_array(img)
+  img = tf.io.serialize_tensor(img_array)
+  image_shape = img_array.shape
+  label = data_list[i][1]
+  # Create a feature
+  feature = {
+    'train/label': _int64_feature(int(label)),
+    'train/image': _bytes_feature(img),
+    'height'     : _int64_feature(image_shape[0]),
+    'width'      : _int64_feature(image_shape[1]),
+    'depth'      : _int64_feature(image_shape[2]),
+  }
+  # Create an example protocol buffer
+  example = tf.train.Example(features=tf.train.Features(feature=feature))
+  
+  # Serialize to string and write on the file
+  writer.write(example.SerializeToString())
     
 writer.close()
 sys.stdout.flush()
