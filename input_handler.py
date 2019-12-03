@@ -39,8 +39,8 @@ train_filename = 'train.tfrecords'
 writer = tf.io.TFRecordWriter(train_filename)
 for i in tqdm(range(len(data_list))):
   # Load the image
-  img = cv2.imread(data_list[i][0])
-  img = cv2.resize(img, (536, 356))   #original [4288, 2848, 3]
+  img = cv2.imread(data_list[i][0], 0)
+  img = cv2.resize(img, (256, 256))   #original [4288, 2848, 3]
   img_array = tf.keras.preprocessing.image.img_to_array(img)
   img = tf.io.serialize_tensor(img_array)
   image_shape = img_array.shape
